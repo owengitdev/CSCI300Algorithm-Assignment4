@@ -7,6 +7,7 @@ import json
 import time
 import random
 import tracemalloc
+from unittest import result
 
 
 # ============================================================================
@@ -32,9 +33,20 @@ def bubble_sort(arr):
     # TODO: Implement bubble sort
     # Hint: Use nested loops - outer loop for passes, inner loop for comparisons
     # Hint: Compare adjacent elements and swap if left > right
-    
-    pass  # Delete this and write your code
+    list = len(arr)
 
+    for i in range(list):
+        swapped = False
+        for j in range (list - 1 - i):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+                swapped = True
+        if not swapped:
+            break
+    return arr        
+    
+list = [64, 34, 25, 12, 22, 11, 90]
+print(f"Unsorted List: {list} ")
 
 def selection_sort(arr):
     """
@@ -55,7 +67,17 @@ def selection_sort(arr):
     # TODO: Implement selection sort
     # Hint: Find minimum element in unsorted portion, swap it with first unsorted element
     
-    pass  # Delete this and write your code
+    for i in range(len(arr)):
+        min_idx = i = i
+        for j in range(i + 1, len(arr)):
+            if arr[j] < arr[min_idx]:
+                min_idx = j
+        (arr[i], arr[min_idx]) = (arr[min_idx], arr[i])
+
+data = ([64, 34, 25, 12, 22, 11, 90])
+selection_sort(data)
+print(f"Sorted List: {data}")
+
 
 
 def insertion_sort(arr):
@@ -77,7 +99,21 @@ def insertion_sort(arr):
     # TODO: Implement insertion sort
     # Hint: Start from second element, insert it into correct position in sorted portion
     
-    pass  # Delete this and write your code
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+
+        while j >= 0 and key < arr[j]:
+            arr[j + 1] = arr[j]
+            j = j - 1
+
+        arr[j + 1] = key
+
+    data = [64, 34, 25, 12, 22, 11, 90]
+    insertion_sort(data)
+    print_sorted_list(data)
+
+
 
 
 def merge_sort(arr):
@@ -100,8 +136,46 @@ def merge_sort(arr):
     # Hint: Base case - if array has 1 or 0 elements, it's already sorted
     # Hint: Recursive case - split array in half, sort each half, merge sorted halves
     # Hint: You'll need a helper function to merge two sorted arrays
-    
-    pass  # Delete this and write your code
+    if len(arr) > 1:
+
+        r = len(arr)//2
+        L = arr[:r]
+        M = arr[r:]
+
+
+        merge_sort(L)
+        merge_sort(M)
+
+        i = j = k = 0
+
+        while i < len(L) and j < len(M):
+            if L[i] < M[j]:
+                arr[k] = L[i]
+                i += 1
+            else:
+                arr[k] = M[j]
+                j += 1
+            k += 1
+
+        while i < len(L):
+            arr[k] = L[i]
+            i += 1
+            k += 1
+        while j < len(M):
+            arr[k] = M[j]
+            j += 1
+            k += 1
+
+def print_sorted_list(arr):
+    for i in range(len(arr)):
+        print(arr[i], end=" ")
+    print()
+
+
+data = [64, 34, 25, 12, 22, 11, 90]
+
+merge_sort(data)
+print_sorted_list(data)
 
 
 # ============================================================================
@@ -141,7 +215,20 @@ def demonstrate_stability():
     }
     
     # TODO: Test each algorithm and update results dictionary with "Stable" or "Unstable"
+    products = [result["product"] for item in products]
+    sorted_products = bubble_sort(products.copy())
+
+    stable = [p["price"] for p in sorted_products]
+
+    sorted_products_selection = selection_sort(products.copy())
+    sorted_prices_selection = [p["price"] for p in sorted_products_selection]
     
+    for sorted_prices_selection in sorted_prices_selection:
+        if sorted_prices_selection == stable:
+            result["selection_sort"] = "Stable"
+        else:
+            result["selection_sort"] = "Unstable"
+
     return results
 
 
@@ -287,8 +374,8 @@ if __name__ == "__main__":
     
     # Uncomment these as you complete each part:
     
-    # test_sorting_correctness()
-    # benchmark_all_datasets()
-    # analyze_stability()
+    test_sorting_correctness()
+    benchmark_all_datasets()
+    analyze_stability()
     
     print("\n⚠ Uncomment the test functions in the main block to run benchmarks!")
